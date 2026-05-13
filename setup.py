@@ -7,7 +7,11 @@ long_description= """
 
 required = [
     "fastapi",
-    "uvicorn"
+    "uvicorn",
+    "requests",
+    "python-multipart",
+    "sqlalchemy",
+    "python-jose"
 ]
 
 setup(
