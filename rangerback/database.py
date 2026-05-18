@@ -7,6 +7,7 @@ from sqlalchemy import (
     insert,
     Integer,
     String,
+    Boolean,
     update,
     delete
 )
@@ -20,7 +21,11 @@ def init_database(location):
         {
             "id" : Integer,
             "username" : String,
-            "password_hash" : String
+            "email" : String,
+            "password_hash" : String,
+            "admin" : Boolean,
+            "thumbnail_url" : String,
+            "validated" : Boolean
         }
     )
     db.init_database()

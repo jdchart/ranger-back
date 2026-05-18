@@ -72,7 +72,7 @@ def get_authenticated_user(
         )
 
 @router.post("/users/create")
-def create_user(username: str = Form(...), password: str = Form(...)):
+def create_user(email: str = Form(...), username: str = Form(...), password: str = Form(...)):
     exists = db.does_entry_exist(
         "users",
         "username",
@@ -89,8 +89,12 @@ def create_user(username: str = Form(...), password: str = Form(...)):
     user_id = db.create_entry(
         "users",
         {
-            "username": username,
-            "password_hash": password_hash
+            "username" : username,
+            "email" : email,
+            "password_hash" : password_hash,
+            "admin" :  False,
+            "thumbnail_url" : None,
+            "validated" : False
         }
     )
 
@@ -130,7 +134,24 @@ def login(username: str = Form(...), password: str = Form(...)):
 
     return {
         "message": "Login successful",
-        "token": token
+        "access_token": token
+    }
+
+@router.post("/users/get-profile")
+def get_me(
+    authorization: str = Header(None)
+):
+    user = get_authenticated_user(
+        authorization
+    )
+
+    return {
+        "id": user["id"],
+        "username": user["username"],
+        "email": user["email"],
+        "admin" : user["admin"],
+        "thumbnail_url" : user["thumbnail_url"],
+        "validated" : user["validated"]
     }
 
 @router.post("/users/me")
@@ -148,12 +169,4 @@ def get_me(
     return {
         "id": user["id"],
         "username": user["username"]
-    }
-
-@router.post("/say-hello")
-async def test_function(message: str = Form(...)):
-    print(f"Hello world: {message}")
-    
-    return {
-        "message" : f"Back from server: {message}"
     }

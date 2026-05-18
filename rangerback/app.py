@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from .database import db
 from .routes_user import router as user_routes
+from .routes_admin import router as admin_routes
 
 def create_app(**kwargs) -> FastAPI:
     app = FastAPI()
@@ -18,10 +17,8 @@ def create_app(**kwargs) -> FastAPI:
         allow_headers = ["*"],
     )
 
-    print("Initializing database...")
-
     app.include_router(user_routes)
+    app.include_router(admin_routes)
 
     print("Running app...")
-
     return app
